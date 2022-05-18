@@ -103,12 +103,28 @@
       .catch((error) => console.error(error))
   }
 
+  const changeEditMode = (e) => {
+    const $item = e.target.closest('.item')
+    const $label = $item.querySelector('label')
+    const $editInput = $item.querySelector('input[type="text"]')
+    const $contentButtons = $item.querySelector('.content_buttons')
+    const $editButtons = $item.querySelector('.edit_buttons')
+
+    if (e.target.className === 'todo_edit_button') {
+      $label.style.display = 'none'
+      $editInput.style.display = 'block'
+      $contentButtons.style.display = 'none'
+      $editButtons.style.display = 'block'
+    }
+  }
+
   const init = () => {
     window.addEventListener('DOMContentLoaded', () => {
       getTodos()
     })
     $form.addEventListener('submit', addTodo)
     $todos.addEventListener('click', toggleTodo)
+    $todos.addEventListener('click', changeEditMode)
   }
   init()
 })()
