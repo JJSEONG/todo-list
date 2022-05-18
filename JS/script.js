@@ -1,11 +1,11 @@
-(function () {
+;(function () {
   'use strict'
 
   const get = (target) => {
     return document.querySelector(target)
   }
 
-  const API_URL = 'http://localhost:3000/todos'
+  const API_URL = `http://localhost:3000/todos`
   const $todos = get('.todos')
   const $form = get('.todo_form')
   const $todoInput = get('.todo_input')
@@ -47,7 +47,7 @@
   }
 
   const renderAllTodos = (todos) => {
-    $todos.innerHTML = '';
+    $todos.innerHTML = ''
     todos.forEach(item => {
       const todoElement = createTodoElement(item)
       $todos.appendChild(todoElement)
@@ -94,7 +94,7 @@
     fetch(`${API_URL}/${id}`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ completed }),
     })
@@ -109,12 +109,16 @@
     const $editInput = $item.querySelector('input[type="text"]')
     const $contentButtons = $item.querySelector('.content_buttons')
     const $editButtons = $item.querySelector('.edit_buttons')
+    const value = $editInput.value
 
     if (e.target.className === 'todo_edit_button') {
       $label.style.display = 'none'
       $editInput.style.display = 'block'
       $contentButtons.style.display = 'none'
       $editButtons.style.display = 'block'
+      $editInput.focus()
+      $editInput.value = ''
+      $editInput.value = value
     }
 
     if (e.target.className === 'todo_edit_cancel_button') {
@@ -122,6 +126,7 @@
       $editInput.style.display = 'none'
       $contentButtons.style.display = 'block'
       $editButtons.style.display = 'none'
+      $editInput.value = $label.innerText
     }
   }
 
@@ -143,6 +148,16 @@
       .catch(error => console.error(error))
   }
 
+  const removeTodo = (e) => {
+    if (e.target.className !== 'todo_remove_button') return
+    const $item = e.target.closest('.item')
+    const id = $item.dataset.id
+
+    fetch(`${API_URL}/${id}`, {
+      method: 'DELETE'
+    }).then(getTodos).catch(error => console.errer(error))
+  }
+
   const init = () => {
     window.addEventListener('DOMContentLoaded', () => {
       getTodos()
@@ -151,6 +166,7 @@
     $todos.addEventListener('click', toggleTodo)
     $todos.addEventListener('click', changeEditMode)
     $todos.addEventListener('click', editTodo)
+    $todos.addEventListener('click', removeTodo)
   }
   init()
 })()
