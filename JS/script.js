@@ -38,7 +38,29 @@
     for (let i = firstNumber; i <= lastNumber; i++) {
       html += `<button class="pageNumber" id="page_${i}">${i}</button>`
     }
+
+    if (lastNumber < totalPage) {
+      html += `<button class='next' data-fn='next'>다음</button>`
+    }
     $pagination.innerHTML = html
+
+    const $currentPageNumber = get(`.pageNumber#page_${currentPage}`)
+    $currentPageNumber.style.color = '#9dc0e9'
+
+    const $currentPageNumbers = document.querySelectorAll('.pagination button')
+    $currentPageNumbers.forEach(button => {
+      button.addEventListener('click', () => {
+        if (button.dataset.fn === 'prev') {
+          currentPage = prev
+        } else if (button.dataset.fn === 'next') {
+          currentPage = next
+        } else {
+          currentPage = button.innerText
+        }
+        pagination()
+        getTodos()
+      })
+    })
   }
 
   const createTodoElement = (item) => {
