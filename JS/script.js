@@ -9,9 +9,37 @@
   const $todos = get('.todos')
   const $form = get('.todo_form')
   const $todoInput = get('.todo_input')
+  const $pagination = get('.pagination')
 
   const limit = 5
-  const currentPage = 1
+  let currentPage = 1
+  const totalCount = 53
+  const pageCount = 5
+
+  const pagination = () => {
+    let totalPage = Math.ceil(totalCount / limit)
+    let pageGroup = Math.ceil(currentPage / pageCount)
+
+    let lastNumber = pageGroup * pageCount
+    if (lastNumber > totalPage) {
+      lastNumber = totalPage
+    }
+    let firstNumber = lastNumber - (pageCount - 1)
+
+    const next = lastNumber + 1
+    const prev = firstNumber - 1
+
+    let html = ''
+
+    if (prev > 0) {
+      html += `<button class='prev' data-fn='prev'>이전</button>`
+    }
+
+    for (let i = firstNumber; i <= lastNumber; i++) {
+      html += `<button class="pageNumber" id="page_${i}">${i}</button>`
+    }
+    $pagination.innerHTML = html
+  }
 
   const createTodoElement = (item) => {
     const { id, content, completed } = item
@@ -164,6 +192,7 @@
   const init = () => {
     window.addEventListener('DOMContentLoaded', () => {
       getTodos()
+      pagination()
     })
     $form.addEventListener('submit', addTodo)
     $todos.addEventListener('click', toggleTodo)
