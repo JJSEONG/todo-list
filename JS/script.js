@@ -81,7 +81,7 @@
               <input type="text" value="${content}" />
             </div>
             <div class="item_buttons content_buttons">
-              <button class="todo_recommend_button ${isRecommend}"></button>
+              <button class="todo_recommend_button ${isRecommended}"></button>
               <button class="todo_edit_button">
                 <i class="far fa-edit"></i>
               </button>
@@ -160,6 +160,20 @@
 
   const recommendTodo = (e) => {
     if(!e.target.classList.contains('todo_recommend_button')) return;
+    const $item = e.target.closest('.item')
+    const id = $item.dataset.id
+    const recommended = !e.target.classList.contains('active')
+    
+    fetch(`${API_URL}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ recommended }),
+    })
+    .then((response => response.json()))
+    .then(getTodos)
+    .catch((error) => console.error(error.message))
   }
 
   const changeEditMode = (e) => {
