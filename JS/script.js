@@ -81,7 +81,10 @@
               <input type="text" value="${content}" />
             </div>
             <div class="item_buttons content_buttons">
-              <button class="todo_recommend_button ${isRecommended}"></button>
+              <button class="todo_recommend_button ${isRecommended}">
+                <i class="far fa-star"></i>
+                <i class="fas fa-star"></i>
+              </button>
               <button class="todo_edit_button">
                 <i class="far fa-edit"></i>
               </button>
